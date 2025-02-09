@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><title>Hyper Screen Plugin</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Processor</title>
+    <style>
+        body {
+           -webkit-font-smoothing: antialiased;
+           -moz-osx-font-smoothing: grayscale;
+           text-rendering: optimizeLegibility;
+       }
+       #image-container {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            transform: translateZ(0);
+            width: 640px;
+            height: 400px;
+            position: relative;
+            /* border: 1px solid #000; */
+        }
+        .overlay-image {
+            position: absolute;
+        }
+        #status {
+            margin-top: 10px;
+        }
+        #process-button {
+            font-size: 110%;
+            line-height: 150%;
+        }
+        #opt {
+            font-size: 90%;
+        }
+        #background-canvas, #preview-button, #opt {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<table>
+  <tr>
+    <td colspan="2">
+      <I><b><u><font size="+1" color="blue">Hyper Screen Generator</font></u></b> (for Wii style theme plugin)</I> --- <b><u>Hyper Cube Game Menu (v3)</u></b><p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+    <div id="image-container"></div>
+    <div id="overlay1"></div>
+    <div id="overlay2"></div>
+    <div id="status"></div>
+    <canvas id="background-canvas" width="640" height="400"></canvas>
+    </td>
+    <td valign="top">
+
+<table>
+  <tr>
+    <td>
+    <font color="blue">*Game files:</font>
+   </td>
+    <td>
+<input type="file" id="main-file-input" multiple onchange="document.getElementById('preview-button').click();"><br>
+    </td>
+  </tr>
+  <tr>
+    <td>
+    Cube panels:
+   </td>
+    <td><input type="file" id="logo-file-input" multiple  onchange="document.getElementById('preview-button').click();"><br>
+    </td>
+  </tr>
+  <tr>
+    <td>
+    Cover1 images:
+   </td>
+    <td><input type="file" id="cover1-file-input" multiple onchange="document.getElementById('preview-button').click();"><br>
+    </td>
+  </tr>
+  <tr>
+    <td>
+    Cover2 images:
+   </td>
+    <td><input type="file" id="cover2-file-input" multiple  onchange="document.getElementById('preview-button').click();"><br>
+    </td>
+  </tr>
+  <tr>
+    <td>
+    Info text files: 
+   </td>
+    <td><input type="file" id="text-file-input" multiple  onchange="document.getElementById('preview-button').click();"><br>
+    </td>
+  </tr>
+</table>
+    <button id="preview-button">Preview</button><br>
+    <br><button id="process-button">&nbsp; Generate! &nbsp;</button><br>
+
+<br>
+<a href="#" onclick="opt=document.getElementById('opt');opt.style.display=(opt.style.display != 'block' ? 'block' : 'none');">Options &gt;&gt;</a>
+<table id="opt">
+  <tr>
+    <td>
+    <label for="file-font">Game Name Font:</label>
+    </td>
+    <td>
+    <select id="file-font">
+        <option value="Arial">Arial</option>
+        <option value="Meiryo UI">Meiryo</option>
+        <option value="Times New Roman">Times New Roman</option>
+        <option value="Courier New">Courier New</option>
+        <option value="Verdana">Verdana</option>
+    </select>
+    </td>
+  </tr>
+  <tr>
+    <td>
+    <label for="file-color">Game Name Color:</label>
+    </td>
+    <td>
+    <select id="file-color">
+        <option value="black">Black</option>
+        <option value="white">White</option>
+        <option value="red">Red</option>
+        <option value="blue">Blue</option>
+        <option value="grey">Grey</option>
+    </select>
+    </td>
+  </tr>
+   <tr>
+    <td>
+   <label for="file-size">Game Name Size:</label>
+    </td>
+    <td>
+    <select id="file-size">
+        <option value="22px">22px</option>
+        <option value="23px">23px</option>
+        <option value="24px">24px</option>
+        <option value="25px">25px</option>
+        <option value="26px">26px</option>
+    </select>
+    </td>
+  </tr>
+  <tr>
+    <td>
+    <label for="file-blur">Game Name Blur:</label>
+    </td>
+    <td>
+    <select id="file-blur">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+    </td>
+  </tr>
+  <tr>
+    <td>
+    <label for="text-font">Info Text Font:</label>
+    </td>
+    <td>
+    <select id="text-font">
+        <option value="Arial">Arial</option>
+        <option value="Meiryo UI">Meiryo</option>
+        <option value="Times New Roman">Times New Roman</option>
+        <option value="Courier New">Courier New</option>
+        <option value="Verdana">Verdana</option>
+    </select>
+    </td>
+  </tr>
+  <tr>
+    <td>
+    <label for="text-color">Info Text Color:</label>
+    </td>
+    <td>
+    <select id="text-color">
+        <option value="black">Black</option>
+        <option value="white">White</option>
+        <option value="red">Red</option>
+        <option value="blue">Blue</option>
+        <option value="grey">Grey</option>
+    </select>
+    </td>
+  </tr>
+  <tr>
+    <td>
+    <label for="text-size">Info Text Size:</label>
+    </td>
+    <td>
+    <select id="text-size">
+        <option value="12px">12px</option>
+        <option value="13px">13px</option>
+        <option value="14px">14px</option>
+        <option value="15px">15px</option>
+        <option value="16px">16px</option>
+    </select>
+    </td>
+  </tr>
+  <tr>
+    <td>
+    <label for="text-blur">Info Text Blur:</label>
+    </td>
+    <td>
+    <select id="text-blur">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+    </td>
+  </tr>
+  </table>
+    </td>
+  </tr>
+</table>
+
+    <script src="script.js"></script>
+</body>
+</html>
