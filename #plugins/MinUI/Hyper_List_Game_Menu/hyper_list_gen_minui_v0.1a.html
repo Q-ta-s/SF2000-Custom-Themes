@@ -312,6 +312,10 @@
         document.getElementById("cover1Input").addEventListener("change", updatePreview);
         document.getElementById("cover2Input").addEventListener("change", updatePreview);
         document.getElementById("generateBtn").addEventListener("click", async (e) => {
+          if (getFiles("mainFileInput").length === 0) {
+              alert('Please Select Game Files.');
+              return;
+          }
           let zoomValue = window.getComputedStyle(document.body).zoom;
           try {
             if (zoomValue < 1) {
@@ -331,6 +335,7 @@
             document.querySelector('.label-msg').style.display = "none";
             e.target.disabled = false;
             if (zoomValue < 1) document.body.style.zoom = zoomValue;
+            setTimeout(() => alert('Process complete.'), 100);
           }
         });
 
